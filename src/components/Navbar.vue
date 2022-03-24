@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">香菇園</a>
+      <a class="navbar-brand" href="#">練習地</a>
       <button
         class="navbar-toggler"
         type="button"

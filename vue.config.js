@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: '/hw7/dist/'
-}
+  publicPath: '/hw7/dist/',
+};
