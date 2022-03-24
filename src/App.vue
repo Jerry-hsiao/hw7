@@ -1,30 +1,25 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <ToastMessages></ToastMessages>
   <router-view />
 </template>
 
+<script>
+import ToastMessages from '@/components/ToastMessages.vue';
+import emitter from '@/methods/eventBus.js';
+export default {
+  components: {
+    ToastMessages,
+  },
+  provide() {
+    return {
+      emitter,
+    };
+  },
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import './assets/all';
+// 推薦使用 CDN，因為 svg 不一定可以從 node_modules 導出
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css');
 </style>

@@ -1,20 +1,68 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../views/Home.vue";
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: '/',
+    name: 'Login',
+    component: () => import('../views/Login.vue'),
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Dashboard.vue'),
+    children: [
+      {
+        path: 'products',
+        name: 'Products',
+        component: () => import('../views/admin/ProductsList.vue'),
+      },
+      {
+        path: 'orders',
+        name: 'Orders',
+        component: () => import('../views/admin/OrdersList.vue'),
+      },
+      {
+        path: 'coupons',
+        name: 'Coupons',
+        component: () => import('../views/admin/CouponsList.vue'),
+      },
+      {
+        path: 'articles',
+        component: () => import('../views/admin/ArticleList.vue'),
+      },
+    ],
+  },
+  {
+    path: '/user',
+    component: () => import('../views/Dashboard.vue'),
+    children: [
+      {
+        path: 'carts',
+        name: 'Carts',
+        component: () => import('../views/user/CartProductsView.vue'),
+      },
+      {
+        path: 'product/:productId',
+        component: () => import('../views/user/CarProductDetail.vue'),
+      },
+      {
+        path: 'articles',
+        component: () => import('../views/user/UserArticles.vue'),
+      },
+      {
+        path: 'article/:articleId',
+        component: () => import('../views/user/UserArticle.vue'),
+      },
+    ],
+  },
+  // {
+  //   path: '/admin/:pathMatch(.*)*',
+  //   redirect: { name: 'Login' },
+  // },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/NotFound.vue'),
   },
 ];
 
