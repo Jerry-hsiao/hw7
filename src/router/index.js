@@ -53,6 +53,10 @@ const routes = [
         path: 'article/:articleId',
         component: () => import('../views/user/UserArticle.vue'),
       },
+      {
+        path: 'checkout/:orderId',
+        component: () => import('../views/user/Checkout.vue'),
+      },
     ],
   },
   // {

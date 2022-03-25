@@ -40,7 +40,7 @@
               </td>
               <td>
                 {{ item.product.title }}
-                <!-- <div class="text-success">已套用優惠券</div> -->
+                <div class="text-success" v-if="item.coupon">已套用優惠券</div>
               </td>
               <td>
                 <div class="input-group input-group-sm">
@@ -75,7 +75,12 @@
                 {{ item.product.price }}
               </td>
               <td class="text-end">
-                {{ item.total }}
+                <small
+                  v-if="cartData.final_total !== cartData.total"
+                  class="text-success"
+                  >折扣價：</small
+                >
+                {{ $filters.currency(item.final_total) }}
               </td>
             </tr>
           </template>
@@ -85,12 +90,32 @@
             <td colspan="4" class="text-end">總計</td>
             <td class="text-end">{{ cartData.final_total }}</td>
           </tr>
-          <!-- <tr>
-          <td colspan="4" class="text-end text-success">折扣價</td>
-          <td class="text-end text-success">{{}}</td>
-        </tr> -->
+          <tr v-if="cartData.final_total !== cartData.total">
+            <td colspan="4" class="text-end text-success">折扣價</td>
+            <td class="text-end text-success">
+              {{ $filters.currency(cartData.final_total) }}
+            </td>
+          </tr>
         </tfoot>
       </table>
+      <div class="input-group mb-3 input-group-sm">
+        <input
+          type="text"
+          class="form-control"
+          v-model="coupon_code"
+          placeholder="請輸入優惠碼"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            @click="addCouponCode"
+          >
+            套用優惠碼
+          </button>
+        </div>
+      </div>
+
       <div class="my-5 row justify-content-center">
         <Form
           ref="form"
@@ -224,6 +249,7 @@ export default {
         loadingItem: '',
       },
       isLoading: false,
+      coupon_code: '',
     };
   },
   methods: {
@@ -306,12 +332,30 @@ export default {
           this.$httpMessageState(res, '新增訂單');
           this.$refs.form.resetForm();
           this.emptyForm();
-          this.getCarts();
+          this.$router.push(`/user/checkout/${res.data.orderId}`);
           this.isLoading = false;
         })
         .catch((err) => {
           this.isLoading = false;
           this.$httpMessageState(err, '新增訂單');
+        });
+    },
+    addCouponCode() {
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/coupon`;
+      const coupon = {
+        code: this.coupon_code,
+      };
+      this.isLoading = true;
+      this.$http
+        .post(url, { data: coupon })
+        .then((response) => {
+          this.$httpMessageState(response, '加入優惠券');
+          this.getCarts();
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.$httpMessageState(error.response, '加入優惠券');
         });
     },
     isPhone(value) {

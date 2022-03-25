@@ -1,12 +1,6 @@
 <template>
   <div class="container">
-    <Loading :active="isLoading" :z-index="1060">
-      <div class="loadingio-spinner-rolling-veo1w6059cj">
-        <div class="ldio-blnks7uamwl">
-          <div></div>
-        </div>
-      </div>
-    </Loading>
+    <Loading :active="isLoading" :z-index="1060"> </Loading>
     <br />
     <!-- 商品列表 -->
     <div class="mt-4">
@@ -77,7 +71,7 @@
         </tbody>
       </table>
     </div>
-    <CartView></CartView>
+    <CartView ref="cartView"></CartView>
   </div>
 </template>
 
@@ -133,15 +127,14 @@ export default {
       this.$http
         .post(url, { data: cart })
         .then((response) => {
-          this.$httpMessageState(response, '購物車增加');
-          this.getCarts();
+          this.$httpMessageState(response, '加入購物車增加');
+          this.$refs.cartView.getCarts();
           this.loadingStatus.loadingItem = '';
           this.isLoading = false;
-          this.$refs.orderProductModal.hideModal();
-          this.$refs.orderProductModal.emptyLoading();
         })
         .catch((err) => {
           this.$httpMessageState(err.response, '購物車增加');
+          this.isLoading = false;
         });
     },
   },
